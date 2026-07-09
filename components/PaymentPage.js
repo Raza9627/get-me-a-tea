@@ -1,38 +1,44 @@
 "use client"
-import React from 'react'
+import React,{useState} from 'react'
 import Script from 'next/script'
 import { initiate } from '@/actions/useractions'
-const PaymentPage = ({username}) => {
-const pay=async (amount,orderId)=>{
-    let a= await initiate(amount,session?.user.name,paymentform);
-    let orderId=a.id;
-   var options = {
-    "key": process.env.KEY_ID, 
-    "amount": amount, 
-    "currency": "INR",
-    "name": "Get me a chai", 
-    "description": "Test Transaction",
-    "image": "https://example.com/your_logo",
-    "order_id": orderId, 
-    "callback_url": `${process.eventNames.URL}/api/razorpay`,
-    "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
-        "name": "<name>", //your customer's name
-        "email": "<email>",
-        "contact": "<phone>" //Provide the customer's phone number for better conversion rates 
-    },
-    "notes": {
-        "address": "Razorpay Corporate Office"
-    },
-    "theme": {
-        "color": "#3399cc"
+import { useSession } from 'next-auth/react'
+const PaymentPage = ({ username }) => {
+    const [paymentform, setpaymentform] = useState({name: "", message: "", amount: ""})
+    const handleChange = (e) => {
+        setpaymentform({ ...paymentform, [e.target.name]: e.target.value })
     }
-}
-var rzp1 = new Razorpay(options);
-    rzp1.open();
-}
-  return (
-    <>
-<div className='w-full bg-red-50 relative'>
+    const pay = async (amount) => {
+        let a = await initiate(amount,username,paymentform);
+        let orderId = a.id;
+        var options = {
+            "key": process.env.NEXT_PUBLIC_KEY_ID,
+            "amount": amount,
+            "currency": "INR",
+            "name": "Get me a chai",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": orderId,
+             "callback_url": `${process.env.NEXT_PUBLIC_URL}/api/razorpay`,
+            "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+                "name": "<name>", //your customer's name
+                "email": "<email>",
+                "contact": "<phone>" //Provide the customer's phone number for better conversion rates 
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        }
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+    return (
+        <>
+        <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
+            <div className='w-full bg-red-50 relative'>
                 <img className='object-cover h-54 w-full md:h-[350]' src="https://images.pexels.com/photos/14747731/pexels-photo-14747731.jpeg" alt="cover" />
                 <div className="absolute -bottom-12 md:-bottom-16 right-[37.5%] md:right-[45%] border-white border-2 rounded-2xl md:w-[150px] md:h-[150px] w-[100px] h-[100px] overflow-hidden">
                     <img
@@ -57,7 +63,7 @@ var rzp1 = new Razorpay(options);
                         <h2 className='text-2xl font-bold md:my-5'>Supporters</h2>
                         <ul className='md:mx-5'>
                             <li className='my-2'>Subham donated <span className='font-bold'>$30</span> with a message <span className='font-bold'>Lots of love bro</span></li>
-                            
+
                             <li className='my-2'>Vishal donated <span className='font-bold'>$10</span> with a message <span className='font-bold'>amazing work</span></li>
                             <li className='my-2'>Sahil donated <span className='font-bold'>$80</span> with a message <span className='font-bold'>its fascinating bro</span></li>
                             <li className='my-2'>Dev donated <span className='font-bold'>$20</span> with a message <span className='font-bold'>too much efforts bro</span></li>
@@ -67,25 +73,28 @@ var rzp1 = new Razorpay(options);
                         <h2 className='text-2xl font-bold m-5'>Make a Payment</h2>
                         <div className="flex gap-2 flex-col">
                             <div>
-                                <input type="text" className='w-full p-3 rounded-lg bg-slate-800 border`' placeholder='Enter Name' />
+                                <input onChange={handleChange} value={paymentform.name}
+                                name='name'  type="text" className='w-full p-3 rounded-lg bg-slate-800 border`' placeholder='Enter Name' />
 
                             </div>
-                            <input type="text" className='w-full p-3 rounded-lg bg-slate-800 border`' placeholder='Enter Message' />
+                            <input onChange={handleChange} value={paymentform.message}
+                            name='message'  type="text" className='w-full p-3 rounded-lg bg-slate-800 border`' placeholder='Enter Message' />
 
-                            <input type="text" className='w-full p-3 rounded-lg bg-slate-800 border`' placeholder='Enter Amount' />
+                            <input onChange={handleChange} value={paymentform.amount} 
+                            name='amount' type="text" className='w-full p-3 rounded-lg bg-slate-800 border`' placeholder='Enter Amount' />
                             <button type='button' className='text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center '>Pay</button>
                         </div>
                         <div className="text-sm md:text-lg flex gap-2 mt-5">
-                            <button className='bg-slate-800 p-3 rounded-lg' onClick={()=>pay(10)}>Pay ₹10</button>
-                            <button className='bg-slate-800 p-3 rounded-lg' onClick={()=>pay(50)}>Pay ₹50</button>
-                            <button className='bg-slate-800 p-3 rounded-lg' onClick={()=>pay(100)}>Pay ₹100</button>
+                            <button className='bg-slate-800 p-3 rounded-lg cursor-pointer' onClick={() => pay(1000)}>Pay ₹10</button>
+                            <button className='bg-slate-800 p-3 rounded-lg cursor-pointer' onClick={() => pay(5000)}>Pay ₹50</button>
+                            <button className='bg-slate-800 p-3 rounded-lg cursor-pointer' onClick={() => pay(10000)}>Pay ₹100</button>
                         </div>
                     </div>
                 </div>
                 <br />
             </div>
-    </>
-  )
+        </>
+    )
 }
 
 export default PaymentPage
