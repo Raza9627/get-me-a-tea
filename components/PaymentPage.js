@@ -90,8 +90,7 @@ useEffect(() => {
                 draggable
                 pauseOnHover
                 theme="light" />
-            {/* Same as */}
-            <ToastContainer />
+
         <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
             <div className='w-full bg-red-50 relative'>
                 <img className='object-cover h-54 w-full md:h-[350]' src={currentUser.coverpic} alt="cover" />
