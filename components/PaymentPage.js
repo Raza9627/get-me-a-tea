@@ -59,7 +59,7 @@ useEffect(() => {
             "description": "Test Transaction",
             "image": "https://example.com/your_logo",
             "order_id": orderId,
-            callback_url: `${window.location.origin}/api/razorpay`,
+            "callback_url": `${window.location.origin}/api/razorpay`,
             "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
                 "name": "<name>", //your customer's name
                 "email": "<email>",
