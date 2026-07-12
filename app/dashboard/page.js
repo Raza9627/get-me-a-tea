@@ -6,3 +6,6 @@ return(
 )
 }
 export default Dashboardpage
+export const metadata ={
+    title:"Dashboard - Get Me A Chai",
+}

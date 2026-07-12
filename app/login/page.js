@@ -6,6 +6,7 @@ const Page = () => {
   const router= useRouter();
   const {data: session} =useSession()
   useEffect(()=>{
+    document.title="Login - Get Me A Chai"
     if(session){
       router.push("/dashboard");
     }
@@ -13,7 +14,7 @@ const Page = () => {
   return (
     <div className="container mx-auto py-[113px]">
       <h1 className="text-white text-center font-bold text-2xl px-6 mb-6 ">
-        login to Get your fans to support you
+        login to Get started
       </h1>
 
       <div className="flex flex-col gap-3 p-1 items-center">
