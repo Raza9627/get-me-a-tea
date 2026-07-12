@@ -58,7 +58,7 @@ const Dashboard = () => {
                         pauseOnHover
                         theme="light" />
                     {/* Same as */}
-                    <ToastContainer />
+                
       
         <div className='container mx-auto md:py-5 px-6 '>
             <h1 className='text-center my-5 text-3xl font-bold'>Welcome to your Dashboard</h1>
